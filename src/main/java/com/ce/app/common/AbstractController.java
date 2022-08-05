@@ -13,14 +13,14 @@ import com.ce.app.common.exception.MethodNotAllowException;
  */
 public abstract class AbstractController {
 	
-	public String doGet(HttpServletRequest requset, HttpServletResponse response) 
+	public String doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		// GET방식만 구현하였는데 POST를 요청한다면 예외던짐!
 		
 		throw new MethodNotAllowException("GET");
 	}
 	
-	public String doPost(HttpServletRequest requset, HttpServletResponse response) 
+	public String doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		// POST방식만 구현하였는데 GET를 요청한다면 예외던짐!
 		

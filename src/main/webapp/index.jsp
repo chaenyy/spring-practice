@@ -10,8 +10,14 @@
 	<h2>Hello World!</h2>
 	<button id="btn">ajax</button>
 	
-	<c:set var="txt">jstl</c:set>
-	${txt}
+<%-- 	<c:set var="txt">jstl</c:set>
+	${txt} --%>
+	
+	<h2>student</h2>
+	<ul>
+		<li><a href="${pageContext.request.contextPath}/student/studentEnroll.do">학생등록</a></li>
+		<li><a href="${pageContext.request.contextPath}/student/selectOne.do">한 건 조회</a></li>
+	</ul>
 
 <script>
 document.querySelector("#btn").addEventListener('click', (e) => {

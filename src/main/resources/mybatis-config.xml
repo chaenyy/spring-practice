@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 
+		자식 태그는 다음 순서로 작성할 것!
+		
+		(properties?, settings?, typeAliases?, typeHandlers?, objectFactory?, 
+		 objectWrapperFactory?, reflectorFactory?, plugins?, environments?, databaseIdProvider?, 
+		 mappers?)
+	 -->
+  <properties resource="/datasource.properties" />	
+  
+  <settings>
+  	<setting name="jdbcTypeForNull" value="NULL"/> <!-- null 데이터 전달 시 그대로 null로 대입 -->
+  	<setting name="mapUnderscoreToCamelCase" value="true"/>
+  </settings>
+  
+  <typeAliases>
+  	<typeAlias type="com.ce.app.student.model.dto.Student" alias="student"/>
+  	<package name="com.ce.app"/> <!-- com.ce.app 하위에 모든 클래스를 소문자로 시작하는 별칭으로 등록 => 클래스 이름 중복 유의 -->
+  </typeAliases>
+  
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <!--
+      	transactionManager type 종류 
+      	JDBC - 코드로 직접 트랜잭션 관리
+      	MANAGED - WAS가 트랜잭션 관리
+      -->
+      
+      <!-- POOLED - Connection Pool을 만들어 Connection을 매번 생성/폐기하지 않고 재사용 -->
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="/mapper/student/student-mapper.xml"/>
+  </mappers>
+</configuration>
