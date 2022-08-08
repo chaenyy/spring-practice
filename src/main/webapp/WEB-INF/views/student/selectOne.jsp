@@ -74,6 +74,46 @@ table.tbl-student tr:last-of-type td:first-child{text-align:center;}
 	</div>
 	
 <script>
+
+const deleteStudent = () => {
+	const frm = document.studentUpdateFrm;
+	const no = frm.no.value;
+	
+	if(confirm("학생 정보를 정말 삭제하시겠습니까?")) {
+		$.ajax({
+			url : "${pageContext.request.contextPath}/student/deleteStudent.do",
+			data : {no},
+			method : "POST",
+			success(response) {
+				alert(response.msg);
+				location.reload();
+			},
+			error : console.log
+		});
+	}
+};
+
+const updateStudent = () => {
+	const frm = document.studentUpdateFrm;
+	const student = {
+		no : frm.no.value,
+		name : frm.name.value,
+		tel : frm.tel.value
+	};
+	
+	$.ajax({
+		url : "${pageContext.request.contextPath}/student/updateStudent.do",
+		data : student,
+		method : "POST",
+		success(response) {
+			alert(response.msg);
+			frm.reset();
+		},
+		error : console.log
+	});
+	
+};
+
 document.studentSearchFrm.addEventListener('submit', (e) => {
 	e.preventDefault();
 	

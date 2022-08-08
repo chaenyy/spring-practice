@@ -25,5 +25,15 @@ public class StudentDaoImpl implements StudentDao {
 	@Override
 	public Student selectOneStudent(SqlSession sqlSession, int no) {
 		return sqlSession.selectOne("student.selectOneStudent", no);
+	} 
+	
+	@Override
+	public int updateStudent(SqlSession sqlSession, Map<String, Object> data) {
+		return sqlSession.update("student.updateStudent", data);
+	}
+	
+	@Override
+	public int deleteStudent(SqlSession sqlSession, int no) {
+		return sqlSession.update("student.deletStudent", no);
 	}
 }

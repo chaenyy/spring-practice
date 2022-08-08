@@ -15,5 +15,9 @@ public interface StudentDao {
 	int getTotalCount(SqlSession sqlSession);
 
 	Student selectOneStudent(SqlSession sqlSession, int no);
+
+	int updateStudent(SqlSession sqlSession, Map<String, Object> data);
+
+	int deleteStudent(SqlSession sqlSession, int no);
 	
 }
