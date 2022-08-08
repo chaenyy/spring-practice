@@ -4,6 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import static com.ce.app.common.SqlSessionUtils.getSqlSession;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ce.app.student.model.dao.StudentDao;
@@ -93,5 +94,19 @@ public class StudentServiceImpl implements StudentService {
 			sqlSession.close();
 		}
 		return result;
+	}
+	
+	@Override
+	public Map<String, Object> selectOneStudentMap(int no) {
+		try(SqlSession sqlSession = getSqlSession()) {
+			return studentDao.selectOneStudentMap(sqlSession, no);			
+		}
+	}
+	
+	@Override
+	public List<Student> selectStudentList() {
+		try(SqlSession sqlSession = getSqlSession()) {
+			return studentDao.selectStudentList(sqlSession);			
+		}
 	}
 }

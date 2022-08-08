@@ -15,9 +15,38 @@
 		select count(*) from student where deleted_at is null
 	</select>
 	
-	<select id="selectOneStudent" resultType="student">
+	<select id="selectOneStudent" resultMap="studentDtoMap">
 		select * from student where deleted_at is null and no = #{no}
 	</select>
+	
+	<!-- resultType/resultMap은 레코드 하나에 대응하는 타입을 작성! -->
+	<!-- <select id="selectStudentList" resultType="student"> -->
+	<select id="selectStudentList" resultMap="studentDtoMap">
+		select * from student where deleted_at is null
+	</select>
+	
+	<resultMap type="student" id="studentDtoMap"> <!-- 반환타입 : student -->
+		<!-- 예측 가능한 범주일 때는 생략 가능! -->
+		<id column="no" property="no"/> <!-- <id> : PK컬럼! -->
+		<result column="name" property="name"/>
+		<result column="tel" property="tel"/>
+		<result column="created_at" property="createdAt"/> <!-- column은 대소문자 구분 X, property는 대소문자 구분 O -->
+		<result column="updated_at" property="updatedAt"/>
+		<result column="deleted_at" property="createdAt"/>
+	</resultMap>
+	
+	<select id="selectOneStudentMap" resultMap="studentMap">
+		select * from student where deleted_at is null and no = #{no}
+	</select>
+	
+	<resultMap type="map" id="studentMap">
+		<id column="no" property="no"/>
+		<result column="name" property="name"/>
+		<result column="tel" property="tel"/>
+		<result column="created_at" property="createdAt"/>
+		<result column="updated_at" property="updatedAt"/>
+		<result column="deleted_at" property="deletedAt"/>
+	</resultMap>
 	
 	<update id="updateStudent">
 		update student set name = #{name}, tel = #{tel}, updated_at = sysdate where no = #{no}

@@ -12,13 +12,13 @@ import com.ce.app.common.AbstractController;
 import com.ce.app.student.model.dto.Student;
 import com.ce.app.student.model.service.StudentService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@RequiredArgsConstructor // 꼭 필요한 인자만 받는 생성자
 public class StudentEnrollController extends AbstractController {
-	static final Logger log = Logger.getLogger(StudentEnrollController.class);
-	private StudentService studentService;
-	
-	public StudentEnrollController (StudentService studentService) {
-		this.studentService = studentService;
-	}
+	private final StudentService studentService; // final -> 필수
 	
 	@Override
 	public String doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

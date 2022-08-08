@@ -120,11 +120,13 @@ document.studentSearchFrm.addEventListener('submit', (e) => {
 	const no = e.target.no.value;
 	
 	$.ajax({
-		url : "${pageContext.request.contextPath}/student/student.do",
+		//url : "${pageContext.request.contextPath}/student/student.do",
+		url : "${pageContext.request.contextPath}/student/studentMap.do",
 		data : {no},
 		success(student) {
 			const frm = document.studentUpdateFrm;
 			if(student) {
+				console.log(student);
 				const {no, name, tel} = student;
 				frm.no.value = no;
 				frm.name.value = name;

@@ -31,10 +31,24 @@ table.tbl-student th,table.tbl-student td{
 				<th>수정일</th>
 			</tr>
 		</thead>
-		<tbody></tbody>
+		<tbody>
+			<c:forEach items="${list}" var="student">
+				<tr>
+					<td>${student.no}</td>
+					<td>${student.name}</td>
+					<td>${student.tel}</td>
+					<td>
+						<fmt:parseDate value="${student.createdAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="createdAt" />
+						<fmt:formatDate value="${createdAt}" pattern="yy/MM/dd HH:mm"/>
+					</td>
+					<td>
+						<fmt:parseDate value="${student.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="updatedAt"/>
+						<fmt:formatDate value="${updatedAt}" pattern="yy/MM/dd HH:mm"/>
+					</td>
+				</tr>
+			</c:forEach>
+		</tbody>
 	</table>
 </div>
-	
-	
 </body>
 </html>
