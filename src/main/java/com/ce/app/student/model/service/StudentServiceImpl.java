@@ -109,4 +109,11 @@ public class StudentServiceImpl implements StudentService {
 			return studentDao.selectStudentList(sqlSession);			
 		}
 	}
+	
+	@Override
+	public List<Map<String, Object>> selectStudentMapList() {
+		try(SqlSession sqlSession = getSqlSession()) {
+			return studentDao.selectStudentMapList(sqlSession);			
+		}
+	}
 }

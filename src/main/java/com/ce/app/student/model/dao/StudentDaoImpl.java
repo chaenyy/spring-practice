@@ -47,4 +47,9 @@ public class StudentDaoImpl implements StudentDao {
 	public List<Student> selectStudentList(SqlSession sqlSession) {
 		return sqlSession.selectList("student.selectStudentList");
 	}
+	
+	@Override
+	public List<Map<String, Object>> selectStudentMapList(SqlSession sqlSession) {
+		return sqlSession.selectList("student.selectStudentMapList");
+	}
 }

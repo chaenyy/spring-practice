@@ -49,6 +49,36 @@ table.tbl-student th,table.tbl-student td{
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<hr />
+	
+	<p>SqlSession의 selectList메소드를 호출해서 List&lt;Map&lt;String, Object>>를 리턴받음.</p>
+	<table class="tbl-student">
+		<thead>
+			<tr>
+				<th>학번</th>
+				<th>이름</th>
+				<th>전화번호</th>
+				<th>등록일</th>
+				<th>수정일</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${mapList}" var="student">
+				<tr>
+					<td>${student.no}</td>
+					<td>${student.name}</td>
+					<td>${student.tel}</td>
+					<td>
+						<fmt:formatDate value="${student.createdAt}" pattern="yy/MM/dd HH:mm"/>
+					</td>
+					<td>
+						<fmt:formatDate value="${student.updatedAt}" pattern="yy/MM/dd HH:mm"/>
+					</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 </div>
 </body>
 </html>

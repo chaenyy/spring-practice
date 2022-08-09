@@ -22,5 +22,7 @@ public interface StudentService {
 	Map<String, Object> selectOneStudentMap(int no);
 
 	List<Student> selectStudentList();
+
+	List<Map<String, Object>> selectStudentMapList();
 	
 }

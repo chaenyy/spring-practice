@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ce.app.common.exception.MethodNotAllowException;
-import com.ce.app.student.model.dao.StudentDao;
+import com.ce.app.emp.model.dao.EmpDaoImpl;
+import com.ce.app.emp.model.service.EmpService;
+import com.ce.app.emp.model.service.EmpServiceImpl;
 import com.ce.app.student.model.dao.StudentDaoImpl;
 import com.ce.app.student.model.service.StudentService;
 import com.ce.app.student.model.service.StudentServiceImpl;
@@ -39,14 +41,25 @@ public class DispatcherServlet extends HttpServlet {
     	// 2. Properties 객체 -> urlCommandMap에 요소추가 (String=AbstractController객체)    	
     	Set<String> urls = prop.stringPropertyNames();	// 모든 키 셋을 리턴
     	
-    	StudentDao studentDao = new StudentDaoImpl();
-    	StudentService studentService = new StudentServiceImpl(studentDao);
+    	StudentService studentService = new StudentServiceImpl(new StudentDaoImpl());
+    	EmpService empService = new EmpServiceImpl(new EmpDaoImpl());
     	
     	for(String url : urls) {
     		String className = prop.getProperty(url);
     		Class<?> clz = Class.forName(className);
-    		Constructor<?> constructor = clz.getDeclaredConstructor(StudentService.class);
-    		AbstractController controller = (AbstractController) constructor.newInstance(studentService);
+    		Class<?>[] params = new Class<?>[1];
+    		Object[] args = new Object[1];
+    		
+    		if(url.startsWith("/student")) {
+    			params[0] = StudentService.class;
+    			args[0] = studentService;	
+    		} else if(url.startsWith("/emp")) {
+    			params[0] = EmpService.class;
+    			args[0] = empService;
+    		}
+    		
+    		Constructor<?> constructor = clz.getDeclaredConstructor(params);
+    		AbstractController controller = (AbstractController) constructor.newInstance(args);
     		urlCommandMap.put(url, controller);
     	}
     	System.out.println("urlCommandMap = " + urlCommandMap);

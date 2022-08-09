@@ -24,5 +24,7 @@ public interface StudentDao {
 	Map<String, Object> selectOneStudentMap(SqlSession sqlSession, int no);
 
 	List<Student> selectStudentList(SqlSession sqlSession);
+
+	List<Map<String, Object>> selectStudentMapList(SqlSession sqlSession);
 	
 }

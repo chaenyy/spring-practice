@@ -22,7 +22,7 @@
 	<!-- resultType/resultMap은 레코드 하나에 대응하는 타입을 작성! -->
 	<!-- <select id="selectStudentList" resultType="student"> -->
 	<select id="selectStudentList" resultMap="studentDtoMap">
-		select * from student where deleted_at is null
+		select * from student where deleted_at is null order by no
 	</select>
 	
 	<resultMap type="student" id="studentDtoMap"> <!-- 반환타입 : student -->
@@ -37,6 +37,10 @@
 	
 	<select id="selectOneStudentMap" resultMap="studentMap">
 		select * from student where deleted_at is null and no = #{no}
+	</select>
+	
+	<select id="selectStudentMapList" resultMap="studentMap">
+		select * from student where deleted_at is null order by no
 	</select>
 	
 	<resultMap type="map" id="studentMap">

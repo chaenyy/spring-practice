@@ -13,7 +13,7 @@ create table student (
 
 create sequence seq_student_no;
 
-select * from student;
+select * from student where no = 42;
 
 insert into student(no, name, tel) values (seq_student_no.nextval, '홍길동', '01012341234');
 insert into student(no, name, tel) values (seq_student_no.nextval, '신사임당', '01099998888');
