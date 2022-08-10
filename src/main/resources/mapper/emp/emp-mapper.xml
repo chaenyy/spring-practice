@@ -7,19 +7,126 @@
 		select * from emp
 	</select>
 	
+	<select id="search1" resultMap="empMap">
+		select * from emp where ${searchType} like '%' || #{searchKeyword} || '%'
+	</select>
+	
+	<select id="search2" resultMap="empMap">
+		select
+			e.*
+		from (
+			select
+				e.*,
+				decode(substr(emp_no, 8, 1), '1', '남', '3', '남', '여') gender
+			from
+				emp e
+		) e
+		<where>
+			<if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != ''">
+				${searchType} like '%' || #{searchKeyword} || '%'
+			</if>
+			<if test="gender != null">
+				and
+				gender = #{gender}
+			</if>
+			<!-- 
+			<if test="salary != null and salary != 0">
+				<if test="salaryCompare != null and salaryCompare eq 'le'">
+					and
+					salary <![CDATA[ <= ]]> #{salary}
+				</if>
+				<if test="salaryCompare != null and salaryCompare eq 'ge'">
+					<![CDATA[
+						and
+						salary >= #{salary}			
+					]]>
+				</if>
+			</if> 
+			-->
+			<!-- if, when의 test 속성에는
+					&& || < > <= >= 연산자 사용 불가
+					and or lt gt le ge 사용할 것	
+			 -->
+			<if test="salary != null and salary != 0">
+				<choose>
+					<when test="salaryCompare != null and salaryCompare eq 'le'">
+						and
+						salary <![CDATA[ <= ]]> #{salary}
+					</when>
+					<when test="salaryCompare != null and salaryCompare eq 'ge'">
+						<![CDATA[
+							and
+							salary >= #{salary}			
+						]]>
+					</when>
+				</choose>
+			</if>
+		</where>
+	</select>
+	
+	<select id="search3" resultMap="empMap">
+		select
+			e.*
+		from (
+			select
+				e.*,
+				(select job_name from job where job_code = e.job_code) job_name,
+				(select dept_title from dept where dept_id = e.dept_code) dept_title,
+				decode(substr(emp_no, 8, 1), '1', '남', '3', '남', '여') gender
+			from
+				emp e
+		) e	
+		<where>
+			<if test="jobCodes != null">
+				e.job_code in
+				<foreach collection="jobCodes" item="jobCode" open="(" close=")" separator=",">
+					#{jobCode}
+				</foreach>
+			</if>
+			<if test="deptCodes != null">
+				and
+				e.dept_code in
+				<foreach collection="deptCodes" item="deptCode" open="(" close=")" separator=",">
+					#{deptCode}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
 	<resultMap type="map" id="empMap">
 		<id column="emp_id" property="empId"/>
 		<result column="emp_name" property="empName"/>
 		<result column="emp_no" property="empNo"/>
+		<result column="gender" property="gender"/>
 		<result column="email" property="email"/>
 		<result column="phone" property="phone"/>
 		<result column="dept_code" property="deptCode"/>
+		<result column="dept_title" property="deptTitle"/>
 		<result column="job_code" property="jobCode"/>
+		<result column="job_name" property="jobName"/>
 		<result column="sal_level" property="salLevel"/>
 		<result column="salary" property="salary"/>
 		<result column="bonus" property="bonus"/>
 		<result column="manager_id" property="managerId"/>
 		<result column="hire_date" property="hireDate"/>
 		<result column="quit_date" property="quitDate"/>
+	</resultMap>
+	
+	<select id="selectDeptList" resultMap="deptMap">
+		select * from dept
+	</select>
+	
+	<resultMap type="map" id="deptMap">
+		<id column="dept_id" property="deptCode"/>
+		<result column="dept_title" property="deptTitle"/>
+	</resultMap>
+	
+	<select id="selectJobList" resultMap="jobMap">
+		select * from job
+	</select>
+	
+	<resultMap type="map" id="jobMap">
+		<id column="job_code" property="jobCode"/>
+		<result column="job_name" property="jobName"/>
 	</resultMap>
 </mapper>

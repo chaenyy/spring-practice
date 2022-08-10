@@ -17,31 +17,31 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @RequiredArgsConstructor
-public class EmpSearchController1 extends AbstractController {
+public class EmpSearchController2 extends AbstractController {
 	private final EmpService empService;
 	
 	@Override
 	public String doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 1. 사용자 입력값 처리
-		String searchType = request.getParameter("searchType");
-		String searchKeyword = request.getParameter("searchKeyword");
+		String searchType = request.getParameter("searchType"); // "검색어" | "" | null
+		String searchKeyword = request.getParameter("searchKeyword"); // "검색어" | "" | null
+		String gender = request.getParameter("gender");	// "성별" | null
+		int salary = 0;
+		try {
+			salary = Integer.parseInt(request.getParameter("salary")); // "금액" | "" | null
+		} catch(NumberFormatException e) {}
+		String salaryCompare = request.getParameter("salaryCompare"); // "범위" | null
+		
 		Map<String, Object> param = new HashMap<>();
 		param.put("searchType", searchType);
 		param.put("searchKeyword", searchKeyword);
-		log.debug("param = " + param);
+		param.put("gender", gender);
+		param.put("salary", salary);
+		param.put("salaryCompare", salaryCompare);
 		
-		List<Map<String, Object>> list = null;
-		
-		// 2. 업무로직
-		if(searchType != null && searchKeyword != null) {
-			list = empService.search1(param);
-		} else {
-			list = empService.selectEmpList();
-		}
-		
+		List<Map<String, Object>> list = empService.search2(param);
 		log.debug("list = " + list);
 		request.setAttribute("list", list);
 		
-		return "emp/search1";
+		return "emp/search2";
 	}
 }

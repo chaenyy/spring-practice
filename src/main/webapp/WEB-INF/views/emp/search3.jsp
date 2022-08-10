@@ -1,3 +1,5 @@
+<%@page import="java.util.List"%>
+<%@page import="java.util.Arrays"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -22,23 +24,52 @@ table.tbl-emp th, table.tbl-emp td{
 div#search-container{
 	padding:15px 0;
 }
+table#tbl-search { margin:0 auto; }
+table#tbl-search th,table#tbl-search td {padding:5px 15px; font-weight: normal; }
+table#tbl-search td {text-align:left;}
 </style>
 </head>
 <body>
+<%
+	String[] jobCodes = request.getParameterValues("jobCode");
+	List<String> jobList = jobCodes != null ? Arrays.asList(jobCodes) : null;
+	String[] deptCodes = request.getParameterValues("deptCode");
+	List<String> deptList = deptCodes != null ? Arrays.asList(deptCodes) : null;
+	pageContext.setAttribute("jobList", jobList);
+	pageContext.setAttribute("deptList", deptList);
+%>
 <div id="emp-container">
 	<h2>사원정보 </h2>
 	<div id="search-container">
 		<form name="empSearchFrm">
-			<select name="searchType" required>
-				<option value="">검색타입</option>
-				<!-- required여부를 판단할 value="" 반드시 있어야함.-->
-			    <option value="emp_id" ${param.searchType eq 'emp_id' ? 'selected' : ''}>사번</option>
-                <option value="emp_name" ${param.searchType eq 'emp_name' ? 'selected' : ''}>사원명</option>
-                <option value="email" ${param.searchType eq 'email' ? 'selected' : ''}>이메일</option>
-                <option value="phone" ${param.searchType eq 'phone' ? 'selected' : ''}>전화번호</option>
-			</select>
-			<input type="search" name="searchKeyword" value="${param.searchKeyword}" required />
-			<input type="submit" value="검색" />
+			<table id="tbl-search">
+				<tr>
+					<th>직급</th>
+					<td>
+						<c:forEach items="${jobCodeList}" var="job" varStatus="vs">
+							<input type="checkbox" name="jobCode" id="jobCode${vs.count}" value="${job.jobCode}" ${jobList.contains(job.jobCode) ? 'checked' : ''}/>
+							<label for="jobCode${vs.count}">${job.jobName}</label>
+							<c:if test="${vs.count mod 3 eq 0}"><br /></c:if>							
+						</c:forEach>
+					</td>
+				</tr>
+				<tr>
+					<th>부서</th>
+					<td>
+						<c:forEach items="${deptCodeList}" var="dept" varStatus="vs">
+							<input type="checkbox" name="deptCode" id="deptCode${vs.count}" value="${dept.deptCode}" ${deptList.contains(dept.deptCode) ? 'checked' : ''}/>
+							<label for="deptCode${vs.count}">${dept.deptTitle}</label>		
+							${vs.count mod 3 eq 0 ? '<br/>' : ''}				
+						</c:forEach>
+					</td>
+				</tr>
+				<tr>
+					<th colspan="2">
+						<input type="submit" value="검색" />
+						<input type="button" onclick="location.href='${pageContext.request.contextPath}/emp/search3.do'" value="초기화" />
+					</th>
+				</tr>
+			</table>
 		</form>
 	</div>
 	
@@ -48,10 +79,11 @@ div#search-container{
 			<th>사번</th>
 			<th>사원명</th>
 			<th>주민번호</th><!--뒷6자리는 ******처리-->
+			<th>성별</th>
 			<th>이메일</th>
 			<th>전화번호</th>
-			<th>부서코드</th>
-			<th>직급코드</th>
+			<th>부서</th>
+			<th>직급</th>
 			<th>급여레벨</th>
 			<th>급여</th><!--원화기호, 세자리마다 콤마표시-->
 			<th>보너스율</th><!--percent로 표시-->
@@ -62,7 +94,7 @@ div#search-container{
 		<!-- 조회된 데이터가 있는 경우와 없는 경우를 분기처리 하세요 -->
 		<c:if test="${empty list}">
 			<tr>
-				<td colspan="14">조회된 정보가 없습니다.</td>
+				<td colspan="15">조회된 정보가 없습니다.</td>
 			</tr>
 		</c:if>
 		<c:if test="${!empty list}">
@@ -74,10 +106,11 @@ div#search-container{
 					<td>
 						${fn:substring(emp.empNo, 0, 8)}******
 					</td>
+					<td>${emp.gender}</td>
 					<td>${emp.email}</td>
 					<td>${emp.phone}</td>
-					<td>${emp.deptCode}</td>
-					<td>${emp.jobCode}</td>
+					<td>${emp.deptTitle}</td>
+					<td>${emp.jobName}</td>
 					<td>${emp.salLevel}</td>
 					<td>
 						<fmt:formatNumber value="${emp.salary}" type="currency"/>
@@ -89,7 +122,7 @@ div#search-container{
 					<td>
 						<fmt:formatDate value="${emp.hireDate}" pattern="yyyy/MM/dd"/>
 					</td>
-					<td>${emp.quitDate}</td>
+					<td><fmt:formatDate value="${emp.quitDate}" pattern="yyyy/MM/dd" /></td>
 				</tr>
 			</c:forEach>
 		</c:if>

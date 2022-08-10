@@ -22,3 +22,25 @@ insert into student(no, name, tel) values (seq_student_no.nextval, '세종대왕
 select * from student where deleted_at is null;
 
 commit;
+
+-- kh 계정의 데이터 사용하기
+select * from kh.employee;
+select * from kh.department;
+select * from kh.job;
+
+-- kh계정 : select 권한 부여
+grant select on kh.employee to web2;
+grant select on kh.department to web2;
+grant select on kh.job to web2;
+
+-- 관리자계정 : create synonym 권한 부여
+grant create synonym to web2;
+
+-- synonym 동의어 객체 생성
+create synonym emp for kh.employee;
+create synonym dept for kh.department;
+create synonym job for kh.job;
+
+select * from emp order by emp_id;
+select * from dept;
+select * from job;
